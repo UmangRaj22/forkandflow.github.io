@@ -1,350 +1,1148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fork & Flow | Open Source Innovation</title>
   <link rel="icon" href="logo.png" type="image/png" class="circle-favicon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
+    }
+
+    :root {
+      --primary: #00ff88;
+      --secondary: #ff0080;
+      --accent: #00d4ff;
+      --dark: #0a0a0f;
+      --darker: #050508;
+      --light: #ffffff;
+      --gray: #8892b0;
     }
 
     body {
-      background-color: #0a0a0a;
-      color: #fff;
-      position: relative;
-      z-index: 1;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--darker);
+      color: var(--light);
+      overflow-x: hidden;
+      line-height: 1.6;
     }
 
-    #particles-js {
+    /* Animated Background */
+    .bg-animation {
       position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      background-color: #0a0a0a;
-      z-index: 0;
+      z-index: -1;
+      background: linear-gradient(45deg, #0a0a0f, #1a0a2e, #16213e, #0f3460);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
     }
 
-    main {
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating Orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      animation: float 20s infinite linear;
+      opacity: 0.6;
+    }
+
+    .orb:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--primary), transparent);
+      top: 20%;
+      left: 10%;
+      animation-duration: 25s;
+    }
+
+    .orb:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, var(--secondary), transparent);
+      top: 60%;
+      right: 20%;
+      animation-duration: 30s;
+      animation-direction: reverse;
+    }
+
+    .orb:nth-child(3) {
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, var(--accent), transparent);
+      bottom: 20%;
+      left: 60%;
+      animation-duration: 35s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-30px) rotate(120deg); }
+      66% { transform: translateY(20px) rotate(240deg); }
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1rem 2rem;
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--gray);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
       position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 2rem;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 50px;
+      color: var(--primary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--light), var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: textGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes textGlow {
+      from { filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.3)); }
+      to { filter: drop-shadow(0 0 40px rgba(0, 255, 136, 0.6)); }
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      color: var(--gray);
+      margin-bottom: 3rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: var(--dark);
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(0, 255, 136, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--light);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      background: rgba(0, 255, 136, 0.1);
+      transform: translateY(-3px);
+    }
+
+    /* Floating Social Icons */
+    .social-marquee {
+      position: absolute;
+      bottom: 5%;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
       z-index: 1;
     }
 
-    .circle-favicon { border-radius: 50%; }
-
-    header {
-      text-align: center;
-      padding: 2rem 1rem 1rem;
-      background-color: rgba(17, 17, 17, 0.8);
-    }
-
-    header img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #00FFD1;
-    }
-
-    header h1 { font-size: 2.5rem; color: #00FFD1; }
-    header p { font-size: 1.1rem; color: #ccc; margin-top: 0.5rem; }
-
-    .join-button {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.7rem 1.5rem;
-      background-color: #00FFD1;
-      color: #000;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      transition: background-color 0.3s;
-    }
-
-    .join-button:hover { background-color: #00d5b0; }
-
-    .marquee {
-      background-color: rgba(17, 17, 17, 0.8);
-      padding: 1rem 0;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .marquee-content {
+    .social-track {
       display: flex;
-      animation: scroll 30s linear infinite;
-      gap: 3rem;
-      align-items: center;
+      animation: socialScroll 25s linear infinite;
+      gap: 4rem;
+      padding: 1rem 0;
     }
 
-    .marquee:hover .marquee-content { animation-play-state: paused; }
+    .social-marquee:hover .social-track {
+      animation-play-state: paused;
+    }
 
-    .marquee-content a {
-      font-size: 3rem;
-      transition: transform 0.3s;
+    .social-icon {
+      font-size: 2.5rem;
+      color: var(--gray);
+      transition: all 0.3s ease;
       text-decoration: none;
     }
 
-    .marquee-content a:hover { transform: scale(1.2); }
+    .social-icon:hover {
+      color: var(--primary);
+      transform: scale(1.2) rotate(10deg);
+    }
 
-    .marquee-content a:nth-child(1) i { color: #E4405F; }
-    .marquee-content a:nth-child(2) i { color: #0077B5; }
-    .marquee-content a:nth-child(3) i { color: #5865F2; }
-    .marquee-content a:nth-child(4) i { color: #FF0000; }
-    .marquee-content a:nth-child(5) i { color: #333; }
-
-    @keyframes scroll {
+    @keyframes socialScroll {
       from { transform: translateX(100%); }
       to { transform: translateX(-100%); }
     }
 
+    /* Sections */
     section {
-      padding: 2.5rem 1.2rem;
-      max-width: 1000px;
-      margin: auto;
-      background-color: rgba(0, 0, 0, 0.5);
-      border-radius: 10px;
-      margin-bottom: 1rem;
+      padding: 8rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
-    section h2 {
-      font-size: 2rem;
-      color: #00FFD1;
-      margin-bottom: 1rem;
-    }
-
-    section p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #ddd;
-    }
-
-    .team {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background-color: #1a1a1a;
-      padding: 1.2rem;
-      border-radius: 10px;
+    .section-header {
       text-align: center;
-      transition: transform 0.3s;
+      margin-bottom: 4rem;
     }
 
-    .card:hover { transform: scale(1.05); }
-    .card img { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem; }
-
-    .button {
+    .section-badge {
       display: inline-block;
-      margin-top: 0.8rem;
-      padding: 0.6rem 1.2rem;
-      background-color: #00FFD1;
-      color: black;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      transition: background-color 0.3s;
+      padding: 0.5rem 1rem;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 20px;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
     }
 
-    .button:hover { background-color: #00d5b0; }
-
-    footer {
-      background-color: rgba(17, 17, 17, 0.8);
-      text-align: center;
-      padding: 1.5rem;
-      color: #999;
-      font-size: 0.9rem;
+    .section-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    footer a {
-      color: #00FFD1;
-      margin: 0 0.5rem;
+    .section-subtitle {
       font-size: 1.2rem;
-      transition: color 0.3s;
+      color: var(--gray);
+      max-width: 600px;
+      margin: 0 auto;
     }
 
-    footer a:hover { color: #fff; }
-
-    @media screen and (max-width: 600px) {
-      .marquee { display: none; }
+    /* Team Grid */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
     }
 
-    @media screen and (max-width: 768px) {
-      header h1 { font-size: 2rem; }
-      section h2 { font-size: 1.5rem; }
-      .team { grid-template-columns: 1fr 1fr; }
+    .team-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .team-card:hover::before {
+      left: 100%;
+    }
+
+    .team-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(0, 255, 136, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
+    }
+
+    .team-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-avatar::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: rotate(45deg);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+      100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    }
+
+    .team-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--light);
+    }
+
+    .team-role {
+      color: var(--primary);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .team-bio {
+      color: var(--gray);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Mission Section */
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 3rem;
+      margin-top: 4rem;
+    }
+
+    .mission-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mission-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.05), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .mission-card:hover::before {
+      left: 100%;
+    }
+
+    .mission-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(0, 255, 136, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
+    }
+
+    .mission-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--dark);
+      margin: 0 auto 2rem;
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+    }
+
+    .mission-card h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--light);
+    }
+
+    .mission-card p {
+      color: var(--gray);
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+
+    /* Projects Section */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 15px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .project-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--accent), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--light);
+      margin-bottom: 1.5rem;
+    }
+
+    .project-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--light);
+    }
+
+    .project-type {
+      color: var(--accent);
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-desc {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .project-btn {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .project-icon img {
+      width: 100%;
+      height: 100%;
+      border-radius: 15px;
+      object-fit: cover;
+      display: block;
+   }
+
+    /* Writings Section */
+    .writings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .writing-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .writing-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 15px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .writing-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .writing-category {
+      padding: 0.3rem 0.8rem;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 15px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    
+    .writing-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--light);
+      line-height: 1.4;
+    }
+
+    .writing-excerpt {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .writing-btn {
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Work With Us Section */
+    .work-content {
+      margin-top: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .work-text {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .work-text p {
+      color: var(--gray);
+      font-size: 1.2rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-section {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 3rem 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-section h3 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .contact-section > p {
+      color: var(--gray);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-info {
+      margin-bottom: 2rem;
+    }
+
+    .email-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1.2rem;
+      color: var(--primary);
+      text-decoration: none;
+      padding: 1rem 2rem;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+
+    .email-link:hover {
+      background: rgba(0, 255, 136, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .team-grid,
+      .projects-grid,
+      .writings-grid,
+      .work-content,
+      .mission-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      section {
+        padding: 4rem 1rem;
+      }
+      
+      .mission-grid {
+        gap: 2rem;
+      }
+      
+      .mission-card {
+        padding: 2rem 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="particles-js"></div>
+  <div class="bg-animation">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
 
-  <main>
-    <header>
-      <img src="logo.png" alt="Fork & Flow Logo">
+  <nav id="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <img src="logo.png" alt="Fork & Flow Logo" class="logo-img" style="width:40px;height:40px;border-radius:50%;margin-right:0.8rem;">
+        Fork & Flow
+      </div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#writings">Writings</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#work-with-us">Work With Us</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">🚀 Revolutionary Open Source Platform</div>
       <h1>Fork & Flow</h1>
-      <p>Something Big is Coming!</p>
-      <a href="https://github.com/forkandflow" target="_blank" class="join-button">JOIN US</a>
-    </header>
-
-    <div class="marquee">
-      <div class="marquee-content">
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-linkedin"></i></a>
-        <a href="#"><i class="fab fa-discord"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-github"></i></a>
+      <p>Where innovation meets collaboration. Join the next generation of developers building the future through open source excellence.</p>
+      <div class="cta-buttons">
+        <a href="#projects" class="btn btn-primary">Explore Projects</a>
+        <a href="https://github.com/forkandflow/forkandflow.github.io" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+          <i class="fab fa-github"></i> View GitHub
+        </a>
       </div>
     </div>
-
-    <section id="about">
-      <h2>Who We Are</h2>
-      <p>Fork & Flow is an innovation-first open-source studio building tools, platforms, and digital solutions in public — for everyone.</p>
-    </section>
-
-    <section id="mission">
-      <h2>Mission</h2>
-      <p>To democratize innovation through open collaboration — making impactful software while sharing everything we learn along the way.</p>
-    </section>
-
-    <section id="vision">
-      <h2>Vision</h2>
-      <p>To be the world’s most accessible and transparent open innovation lab, inspiring a generation to learn, build, and share their ideas freely.</p>
-    </section>
-
-    <section id="projects">
-      <h2>What We're Building</h2>
-      <div class="team">
-        <div class="card">
-          <img src="dottar_logo.png" alt="Dottar">
-          <h3>Dottar</h3>
-          <p>Secure Version Control System</p>
-          <a href="https://forkandflow.github.io/Dottar/" target="_blank" class="button">Visit Project</a>
-        </div>
-        <div class="card">
-          <img src="PyAssistPro_logo.png" alt="PyAssistPro">
-          <h3>PyAssistPro</h3>
-          <p>VSCode Extension</p>
-          <a href="https://github.com/forkandflow/PyAssistPro-Extension" target="_blank" class="button">Visit Project</a>
-        </div>
-        <div class="card">
-          <img src="QRCodeSnip-Logo.png" alt="QRCodeSnip">
-          <h3>QRCode Snip</h3>
-          <p>VSCode Extension</p>
-          <a href="https://github.com/forkandflow/qrcodesnip" target="_blank" class="button">Visit Project</a>
-        </div>
-        <div class="card">
-          <img src="KanbanNotes-Logo.png" alt="KanbanNotes">
-          <h3>Kanban Notes</h3>
-          <p>VSCode Extension</p>
-          <a href="https://github.com/forkandflow/kanban-notes" target="_blank" class="button">Visit Project</a>
-        </div>
-      </div>
-    </section>
-
-     <section id="projects">
-      <h2>Our Writings</h2>
-      <div class="team">
-        <div class="card">
-<!--           <img src="dottar_logo.png" alt="Dottar"> -->
-          <h3>Blog</h3>
-          <p>India's ascent as a global gaming powerhouse.</p>
-          <a href="https://forkandflow.hashnode.dev/indias-ascent-as-a-global-gaming-powerhouse" target="_blank" class="button">Read</a>
-        </div>
-
-        <div class="card">
-<!--           <img src="dottar_logo.png" alt="Dottar"> -->
-          <h3>Blog</h3>
-          <p>The Algorithm Kill Switch — Code, Cash, and Control: Inside India’s High-Stakes War on Gaming, Gambling, and Digital Addiction</p>
-          <a href="https://forkandflow.hashnode.dev/the-algorithm-kill-switch-code-cash-and-control-inside-indias-high-stakes-war-on-gaming-gambling-and-digital-addiction" target="_blank" class="button">Read</a>
-        </div>
-       
-      </div>
-    </section>
     
-    <section id="team">
-      <h2>Meet the Team</h2>
-      <div class="team">
-        <div class="card">
-          <img src="logo.png" alt="TBD">
-          <h3>Vaibhav Rawat</h3>
-          <p>Founder</p>
-          <a href="https://linkedin.com/in/vaibhavrawat27" target="_blank" class="button">View More</a>
-        </div>
-        <div class="card">
-          <img src="logo.png" alt="TBD">
-          <h3>Member 2</h3>
-          <p>Role</p>
-          <a href="#" target="_blank" class="button">View More</a>
-        </div>
-        <div class="card">
-          <img src="logo.png" alt="TBD">
-          <h3>Member 3</h3>
-          <p>Role</p>
-          <a href="#" target="_blank" class="button">View More</a>
-        </div>
-        <div class="card">
-          <img src="logo.png" alt="TBD">
-          <h3>Member 4</h3>
-          <p>Role</p>
-          <a href="#" target="_blank" class="button">View More</a>
-        </div>
+    <div class="social-marquee">
+      <div class="social-track">
+        <a href="https://github.com/forkandflow/forkandflow.github.io" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-github"></i></a>
+        <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-discord"></i></a>
+        <a href="https://www.linkedin.com/company/fork-and-flow" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-linkedin"></i></a>
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.instagram.com/theforkandflow" target="_blank" rel="noopener noreferrer" class="social-icon"><i class="fab fa-instagram"></i></a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="contact">
-      <h2>Work With Us</h2>
-      <p>Have a project idea, collaboration offer, or opportunity? We’d love to hear from you.</p>
-      <p>📧 <strong>hello.forkandflow@gmail.com</strong></p>
-      <p><strong>Follow us on all social media for updates!</strong></p>
-    </section>
+  <section id="about">
+    <div class="section-header">
+      <div class="section-badge">Who We Are</div>
+      <h2 class="section-title">Revolutionizing Open Source</h2>
+      <p class="section-subtitle">Fork & Flow is an innovation-first open-source studio building tools, platforms, and digital solutions in public — for everyone.</p>
+    </div>
+  </section>
 
-    <footer>
-      &copy; 2025 Fork & Flow • Built with ❤️ to build in public<br>
-      <p>Find us on:
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-linkedin"></i></a>
-        <a href="#"><i class="fab fa-discord"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-github"></i></a>
-      </p>
-    </footer>
-  </main>
+  <section id="mission">
+    <div class="section-header">
+      <div class="section-badge">Our Purpose</div>
+      <h2 class="section-title">Mission & Vision</h2>
+    </div>
+    
+    <div class="mission-grid">
+      <div class="mission-card">
+        <div class="mission-icon"><i class="fas fa-bullseye"></i></div>
+        <h3>Our Mission</h3>
+        <p>To democratize innovation through open collaboration — making impactful software while sharing everything we learn along the way.</p>
+      </div>
+      
+      <div class="mission-card">
+        <div class="mission-icon"><i class="fas fa-eye"></i></div>
+        <h3>Our Vision</h3>
+        <p>To be the world’s most accessible and transparent open innovation lab, inspiring a generation to learn, build, and share their ideas freely.</p>
+      </div>
+    </div>
+  </section>
 
-  <!-- Particles.js library -->
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <section id="projects">
+    <div class="section-header">
+      <div class="section-badge">Our Work</div>
+      <h2 class="section-title">Featured Projects</h2>
+      <p class="section-subtitle">Discover groundbreaking open source projects that are reshaping industries and empowering developers worldwide.</p>
+    </div>
+    
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-icon">
+            <img src="dottar_logo.png" alt="Dottar Logo">
+        </div>
+        <h3 class="project-title">Dottar</h3>
+        <p class="project-type">Secure Version Control System</p>
+        <a href="https://forkandflow.github.io/Dottar/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary project-btn">
+          <i class="fas fa-external-link-alt"></i> Visit Project
+        </a>
+      </div>
+      
+      <div class="project-card">
+        <div class="project-icon">
+            <img src="PyAssistPro_logo.png" alt="PyAssistPro Logo">
+        </div>
+        <h3 class="project-title">PyAssistPro</h3>
+        <p class="project-type">VS Code Extension</p>
+        <a href="https://github.com/forkandflow/PyAssistPro-Extension" target="_blank" rel="noopener noreferrer" class="btn btn-secondary project-btn">
+          <i class="fas fa-external-link-alt"></i> Visit Project
+        </a>
+      </div>
+      
+      <div class="project-card">
+        <div class="project-icon">
+            <img src="QRCodeSnip-Logo.png" alt="QR Code Snip Logo">
+        </div>
+        <h3 class="project-title">QRCode Snip</h3>
+        <p class="project-type">VS Code Extension</p>
+        <a href="https://github.com/forkandflow/qrcodesnip" target="_blank" rel="noopener noreferrer" class="btn btn-secondary project-btn">
+          <i class="fas fa-external-link-alt"></i> Visit Project
+        </a>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">
+            <img src="KanbanNotes-Logo.png" alt="Kanban Notes Logo">
+        </div>
+        <h3 class="project-title">Kanban Notes</h3>
+        <p class="project-type">VS Code Extension</p>
+        <a href="https://github.com/forkandflow/kanban-notes" target="_blank" rel="noopener noreferrer" class="btn btn-secondary project-btn">
+          <i class="fas fa-external-link-alt"></i> Visit Project
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="writings">
+    <div class="section-header">
+      <div class="section-badge">Knowledge Hub</div>
+      <h2 class="section-title">Our Writings</h2>
+      <p class="section-subtitle">Insights, tutorials, and thought leadership from our team of experts. Stay ahead with the latest trends in open source development.</p>
+    </div>
+    
+    <div class="writings-grid">
+      <article class="writing-card">
+        <div class="writing-meta">
+          <span class="writing-category">Blog</span>
+        </div>
+        <h3 class="writing-title">India's ascent as a global gaming powerhouse.</h3>
+        <a href="https://forkandflow.hashnode.dev/indias-ascent-as-a-global-gaming-powerhouse" class="btn btn-secondary writing-btn">Read Article</a>
+      </article>
+      
+      <article class="writing-card">
+        <div class="writing-meta">
+          <span class="writing-category">Blog</span>
+        </div>
+        <h3 class="writing-title">The Algorithm Kill Switch — Code, Cash, and Control: Inside India’s High-Stakes War on Gaming, Gambling, and Digital Addiction</h3>
+        <a href="https://forkandflow.hashnode.dev/the-algorithm-kill-switch-code-cash-and-control-inside-indias-high-stakes-war-on-gaming-gambling-and-digital-addiction" class="btn btn-secondary writing-btn">Read Article</a>
+      </article>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="section-header">
+      <div class="section-badge">Dream Team</div>
+      <h2 class="section-title">Meet the Visionaries</h2>
+      <p class="section-subtitle">Passionate innovators dedicated to pushing the boundaries of what's possible in open source development.</p>
+    </div>
+    
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">VR</div>
+        <h3 class="team-name">Vaibhav Rawat</h3>
+        <p class="team-role">Founder</p>
+        <button class="btn btn-primary" onclick="showProfile('Vaibhav Rawat', 'Founder', 'Vaibhav is a visionary leader with past 1 years of experience in open source development.')">Connect</button>
+      </div>
+      
+      <div class="team-card">
+        <div class="team-avatar">M</div>
+        <h3 class="team-name">Member 2</h3>
+        <p class="team-role">Role</p>
+        <button class="btn btn-primary" onclick="showProfile('Member 2', 'Role', 'Member 2 is an award-winning designer with expertise in UX/UI design for developer tools.')">Connect</button>
+      </div>
+      
+      <div class="team-card">
+        <div class="team-avatar">M</div>
+        <h3 class="team-name">Member 3</h3>
+        <p class="team-role">Role</p>
+        <button class="btn btn-primary" onclick="showProfile('Member 3', 'Role', 'Member 3 is a backend mastermind specializing in distributed systems and cloud architecture.')">Connect</button>
+      </div>
+      
+      <div class="team-card">
+        <div class="team-avatar">M</div>
+        <h3 class="team-name">Member 4</h3>
+        <p class="team-role">Role</p>
+        <button class="btn btn-primary" onclick="showProfile('Member 4', 'Role', 'Member 4 is a community builder extraordinaire with experience managing developer communities at GitHub.')">Connect</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="work-with-us">
+    <div class="section-header">
+      <div class="section-badge">Join Our Mission</div>
+      <h2 class="section-title">Work With Us</h2>
+      <p class="section-subtitle">Join us in revolutionizing the world of open source development.</p>
+    </div>
+    
+    <div class="work-content">
+      <div class="work-text">
+        <p>Have a project idea, collaboration offer, or opportunity? We’d love to hear from you.</p>
+        <p>Follow us on all social media for updates!</p>
+      </div>
+    </div>
+    
+    <div class="contact-section">
+      <h3>Get In Touch</h3>
+      <p>Ready to start a conversation? Drop us a line and let's build something amazing together.</p>
+      <div class="contact-info">
+        <a href="mailto:hello@forkandflow.dev" class="email-link">
+          <i class="fas fa-envelope"></i>
+          hello.forkandflow@gmail.com
+        </a>
+      </div>
+      <div class="cta-buttons">
+        <a href="mailto:hello@forkandflow.dev" class="btn btn-primary">Send Email</a>
+        <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Join Discord</a>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="footer-content">
+      <h3 style="margin-bottom: 2rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Ready to Fork the Future?</h3>
+      <div class="footer-links">
+        <a href="https://github.com/forkandflow/forkandflow.github.io" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://discord.com" target="_blank" rel="noopener noreferrer">Discord</a>
+        <a href="https://www.linkedin.com/company/fork-and-flow" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://www.instagram.com/theforkandflow" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="mailto:hello@forkandflow.dev">Contact</a>
+      </div>
+      <p style="color: var(--gray);">&copy; 2025 Fork & Flow • Built with ❤️ to build in public</p>
+    </div>
+  </footer>
+
   <script>
-    particlesJS("particles-js", {
-      "particles": {
-        "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-        "color": { "value": "#00FFD1" },
-        "shape": { "type": "circle" },
-        "opacity": { "value": 0.5 },
-        "size": { "value": 3 },
-        "line_linked": { "enable": true, "distance": 150, "color": "#00FFD1", "opacity": 0.4, "width": 1 },
-        "move": { "enable": true, "speed": 2 }
-      },
-      "interactivity": {
-        "detect_on": "canvas",
-        "events": {
-          "onhover": { "enable": true, "mode": "grab" },
-          "onclick": { "enable": true, "mode": "push" }
-        },
-        "modes": {
-          "grab": { "distance": 140, "line_linked": { "opacity": 0.8 } },
-          "push": { "particles_nb": 4 }
+    // Smooth scrolling for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
         }
-      },
-      "retina_detect": true
+      });
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(10, 10, 15, 0.95)';
+        navbar.style.borderBottom = '1px solid rgba(0, 255, 136, 0.2)';
+      } else {
+        navbar.style.background = 'rgba(10, 10, 15, 0.8)';
+        navbar.style.borderBottom = '1px solid rgba(0, 255, 136, 0.1)';
+      }
+    });
+
+    // Team profile modal
+    function showProfile(name, role, bio) {
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeIn 0.3s ease;
+      `;
+      
+      modal.innerHTML = `
+        <div style="
+          background: linear-gradient(135deg, rgba(10, 10, 15, 0.9), rgba(26, 10, 46, 0.9));
+          border: 1px solid rgba(0, 255, 136, 0.3);
+          border-radius: 20px;
+          padding: 3rem;
+          max-width: 500px;
+          text-align: center;
+          backdrop-filter: blur(20px);
+          animation: slideUp 0.3s ease;
+        ">
+          <h2 style="color: var(--primary); margin-bottom: 0.5rem; font-size: 2rem;">${name}</h2>
+          <p style="color: var(--accent); margin-bottom: 2rem; font-weight: 600;">${role}</p>
+          <p style="color: var(--gray); line-height: 1.6; margin-bottom: 2rem;">${bio}</p>
+          <button onclick="this.closest('div').remove()" style="
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--dark);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+          " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            Close
+          </button>
+        </div>
+      `;
+      
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+      });
+      
+      document.body.appendChild(modal);
+    }
+
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      @keyframes slideUp {
+        from { transform: translateY(50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = 'slideUp 0.8s ease forwards';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all cards
+    document.querySelectorAll('.team-card, .project-card').forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(50px)';
+      observer.observe(card);
     });
   </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9820a41e828647ed',t:'MTc1ODM2NDE2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
